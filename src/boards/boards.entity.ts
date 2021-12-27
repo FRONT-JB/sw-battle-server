@@ -1,3 +1,17 @@
-import { BaseEntity } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CreatorInfo, PostContent } from './model/boards.model';
 
-export class Board extends BaseEntity {}
+@Entity()
+export class Board extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column('simple-array')
+  keyword: string[];
+
+  @Column('simple-json')
+  creator: CreatorInfo;
+
+  @Column('simple-json')
+  content: PostContent;
+}
