@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -24,5 +25,10 @@ export class CommentController {
   @Post()
   createComment(@Body() create: CreateCommentDto): Promise<Comment> {
     return this.commentService.createComment(create);
+  }
+
+  @Delete('/:id')
+  deleteComment(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.commentService.deleteComment(id);
   }
 }
