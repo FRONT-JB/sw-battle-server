@@ -16,6 +16,7 @@ export class BoardsService {
   ) {}
 
   async getAllBoard(query: FilterQuery): Promise<Board[]> {
+    // !TODO : DATA BASE FILTERING FIND
     const filterKeyword = Object.values(query);
     const isNotNullKeyword = !!filterKeyword.length;
     if (isNotNullKeyword) {
