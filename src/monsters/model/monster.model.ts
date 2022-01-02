@@ -9,6 +9,8 @@ export interface Monster {
   element: string;
   archetype: string;
   natural_stars: number;
+  can_awaken: boolean;
+  obtainable: boolean;
 }
 
 export interface MonsterResult {
