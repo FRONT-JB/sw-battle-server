@@ -7,3 +7,18 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   synchronize: true,
 };
+
+export const typeORMConfigDev: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'sw-app',
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  synchronize: true,
+};
+
+export const TYPEORM_CONFIG = process.env.PORT
+  ? typeORMConfig
+  : typeORMConfigDev;
