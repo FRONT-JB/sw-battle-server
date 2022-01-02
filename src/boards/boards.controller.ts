@@ -9,21 +9,29 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './boards.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '~/auth/utils/get-user.decorator';
+import { User } from '~/auth/user.entity';
 
 @Controller('boards')
+@UseGuards(AuthGuard())
 export class BoardsController {
   constructor(private boardSerivce: BoardsService) {}
   @Get()
-  getAllBoard(@Query() query: FilterQuery) {
+  getAllBoard(@Query() query: FilterQuery): Promise<Board[]> {
     return this.boardSerivce.getAllBoard(query);
   }
 
   @Post()
-  createBoard(@Body() create: CreateBoardDto): Promise<Board> {
-    return this.boardSerivce.createBoard(create);
+  createBoard(
+    @Body() create: CreateBoardDto,
+    @GetUser() user: User,
+  ): Promise<Board> {
+    return this.boardSerivce.createBoard(create, user);
   }
 
   @Get('/:id')
