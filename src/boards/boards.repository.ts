@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './boards.entity';
 import { EntityRepository, Repository } from 'typeorm';
@@ -9,6 +9,13 @@ export class BoardsRepository extends Repository<Board> {
   async createBoard(create: CreateBoardDto, user: User): Promise<Board> {
     const { content } = create;
     const keyword = content.defense.map((monster) => monster.name);
+    const boards = await this.find();
+    const isConflict = boards.some((board) =>
+      keyword.every((keyword) => board.keyword.includes(keyword)),
+    );
+    if (isConflict) {
+      throw new ConflictException('These are duplicated Attack posts.');
+    }
     const board = this.create({
       content,
       keyword,
