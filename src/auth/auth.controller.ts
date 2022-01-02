@@ -46,10 +46,4 @@ export class AuthController {
   updateUserRole(@Body() authUpdateRoleDto: AuthUpdateRoleDto): Promise<void> {
     return this.authService.updateUserRole(authUpdateRoleDto);
   }
-
-  @Post('/test')
-  @UseGuards(AuthGuard())
-  test(@GetUser() user: User) {
-    console.log('user', user);
-  }
 }
