@@ -1,5 +1,4 @@
 import { AuthUpdateRoleDto } from './dto/auth-role';
-import { AuthRole } from './model/auth';
 import {
   Injectable,
   NotFoundException,
