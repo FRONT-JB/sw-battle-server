@@ -1,5 +1,4 @@
 import { AuthUpdateRoleDto } from './dto/auth-role';
-import { AuthRole } from './model/auth';
 import { AuthService } from './auth.service';
 import {
   Body,
@@ -9,11 +8,8 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './utils/get-user.decorator';
 import { User } from './user.entity';
 
 @Controller('auth')
