@@ -1,4 +1,3 @@
-import { FilterQuery } from './model/boards.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardsRepository } from './boards.repository';
@@ -16,9 +15,9 @@ export class BoardsService {
     private commentRepository: CommentRepository,
   ) {}
 
-  async getAllBoard(query: FilterQuery): Promise<Board[]> {
+  async getAllBoard(param): Promise<Board[]> {
     // !TODO : DATA BASE FILTERING FIND
-    const filterKeyword = Object.values(query);
+    const filterKeyword: string[] = Object.values(param);
     const isNotNullKeyword = !!filterKeyword.length;
     if (isNotNullKeyword) {
       const boards = await this.boardsRepository.find();

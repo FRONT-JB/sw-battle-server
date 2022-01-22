@@ -1,4 +1,3 @@
-import { FilterQuery } from './model/boards.model';
 import { BoardsService } from './boards.service';
 import {
   Body,
@@ -22,7 +21,7 @@ import { User } from '~/auth/user.entity';
 export class BoardsController {
   constructor(private boardSerivce: BoardsService) {}
   @Get()
-  getAllBoard(@Query() query: FilterQuery): Promise<Board[]> {
+  getAllBoard(@Query() query: string[]): Promise<Board[]> {
     return this.boardSerivce.getAllBoard(query);
   }
 

@@ -8,9 +8,3 @@ export interface CreatorInfo {
 export interface PostContent {
   defense: Monster[];
 }
-
-export interface FilterQuery {
-  selectOne?: string;
-  selectTwo?: string;
-  selectThree?: string;
-}
