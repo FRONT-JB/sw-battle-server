@@ -6,12 +6,15 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('comment')
+@UseGuards(AuthGuard())
 export class CommentController {
   constructor(private commentService: CommentService) {}
 

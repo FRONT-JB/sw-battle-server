@@ -1,5 +1,6 @@
 import { AuthUpdateRoleDto } from './dto/auth-role';
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -23,12 +24,18 @@ export class AuthService {
     return this.userRepository.find();
   }
 
+  async checkUserRole(userId: number): Promise<{ role: string }> {
+    const foundUser = await this.userRepository.findOne({ id: userId });
+    return { role: foundUser.role };
+  }
   async updateUserRole(authUpdateRoleDto: AuthUpdateRoleDto): Promise<void> {
     const { id, role } = authUpdateRoleDto;
     const foundUser = await this.userRepository.findOne({ id });
+    if (role === foundUser.role) {
+      throw new ConflictException('is Conflict User Role');
+    }
     const updateUser = {
       ...foundUser,
-      id: foundUser.id,
       role,
     };
     await this.userRepository.save(updateUser);
@@ -36,15 +43,15 @@ export class AuthService {
 
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ token: string }> {
+  ): Promise<{ token: string; role: string }> {
     const { username, password } = authCredentialsDto;
     const foundUser = await this.userRepository.findOne({ username });
     const isMatched = await bcrypt.compare(password, foundUser.password);
 
     if (foundUser && isMatched) {
-      const payload = { username, role: foundUser.role };
+      const payload = { id: foundUser.id, username, role: foundUser.role };
       const accessToken = await this.jwtService.sign(payload);
-      return { token: accessToken };
+      return { token: accessToken, role: foundUser.role };
     } else {
       throw new UnauthorizedException('login Failed');
     }

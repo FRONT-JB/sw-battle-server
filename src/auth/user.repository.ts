@@ -19,7 +19,7 @@ export class UserRepository extends Repository<User> {
     const user = this.create({
       username,
       password: hashedPassword,
-      role: AuthRole.USER,
+      role: AuthRole.PENDING,
     });
 
     try {

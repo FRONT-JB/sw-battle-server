@@ -24,7 +24,7 @@ export class AuthController {
   @Post('/signin')
   signIn(
     @Body() authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ token: string }> {
+  ): Promise<{ token: string; role: string }> {
     return this.authService.signIn(authCredentialsDto);
   }
 
@@ -37,7 +37,10 @@ export class AuthController {
   deleteUser(@Param('id') id: number): Promise<void> {
     return this.authService.deleteUser(id);
   }
-
+  @Get('/role/:userId')
+  checkUserRole(@Param('userId') userId: number): Promise<{ role: string }> {
+    return this.authService.checkUserRole(userId);
+  }
   @Patch('/role')
   updateUserRole(@Body() authUpdateRoleDto: AuthUpdateRoleDto): Promise<void> {
     return this.authService.updateUserRole(authUpdateRoleDto);
