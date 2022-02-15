@@ -1,3 +1,4 @@
+import { BoardsRepository } from './../boards/boards.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './comment.entity';
@@ -8,19 +9,26 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 export class CommentService {
   constructor(
     @InjectRepository(CommentRepository)
-    private commentRepositry: CommentRepository,
+    @InjectRepository(BoardsRepository)
+    private commentRepository: CommentRepository,
+    private boardRepository: BoardsRepository,
   ) {}
 
-  createComment(create: CreateCommentDto): Promise<Comment> {
-    return this.commentRepositry.createComment(create);
+  async createComment(create: CreateCommentDto): Promise<Comment> {
+    const { boardId } = create;
+    const found = await this.boardRepository.getBoardById(boardId);
+    if (!found) {
+      throw new NotFoundException(`Can't find ${boardId}`);
+    }
+    return this.commentRepository.createComment(create);
   }
 
   async getCommentByBoardId(id: number): Promise<Comment[]> {
-    return await this.commentRepositry.getCommentByBoardId(id);
+    return await this.commentRepository.getCommentByBoardId(id);
   }
 
   async deleteComment(id: number): Promise<void> {
-    const result = await this.commentRepositry.delete(id);
+    const result = await this.commentRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Can't find Comment with ${id}`);
     }
